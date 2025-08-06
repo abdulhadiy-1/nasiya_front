@@ -1,22 +1,33 @@
 import { Button } from "antd"
-import { human } from "../../assets/images"
 import Heading from "../../components/Heading"
 import { EyeIcon, KolendarIcon, PlusIcon, WalletIcon } from "../../assets/icons"
 import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import instance from "../../hooks/instance"
+import { useCookies } from "react-cookie"
+import type { SellerType } from "../../@types/SellerType"
+import { API } from "../../hooks/getEnv"
+import { formatNumber } from "../../hooks/formatNum"
 
 const Home = () => {
   const [show, setShow] = useState<boolean>(true)
+  const [cookie] = useCookies(['accessToken'])
+  const {data} = useQuery<SellerType>({
+    queryKey: ['get-seller'],
+    queryFn: () => instance.get("/seller/me", {headers: {Authorization: `Bearer ${cookie.accessToken}`}}).then(res => res.data.data)
+  })
+  
   return (
     <div className="containers !pt-[29px]">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-[15px]">
-          <img className="rounded-full" src={human} alt="human img" width={40} height={40}/>
-          <Heading tag="h2">Testuchun</Heading>
+          <img className="rounded-full" src={`${API}${data?.img}`} alt="seller img" width={40} height={40}/>
+          <Heading tag="h2">{data?.fullName}</Heading>
         </div>
         <Button className="!bg-[#EDEDED] !py-[11px] !px-[5px]"><KolendarIcon /></Button>
       </div>
       <div className="bg-[#30AF49] text-white rounded-[20px] flex flex-col items-center justify-between py-[18px] relative mt-[38px]">
-        <Heading classList="!text-[20px]" tag="h1">{show ? "135 214 200 so‘m" : "****"}</Heading>
+        <Heading classList="!text-[20px]" tag="h1">{show ? `${formatNumber(data?.totalDebt || 0)} so‘m` : "****"}</Heading>
         <Heading tag="h3" classList="!text-[#F6F6F6B2]">Umumiy nasiya:</Heading>
         <button className="absolute right-[20px] top-[37px] cursor-pointer" onClick={() => setShow(!show)}>
           <EyeIcon />
@@ -25,11 +36,11 @@ const Home = () => {
       <div className="flex gap-[8px] mt-[31px]">
         <div className="p-[16px] rounded-[16px] border-[1px] border-[#ECECEC] w-full h-[127px] pr-[30px] flex flex-col justify-between">
             <Heading tag="h3">Kechiktirilgan to‘lovlar</Heading>
-            <Heading tag="h2" classList="!text-[18px] !text-[#F94D4D]">23</Heading>
+            <Heading tag="h2" classList="!text-[18px] !text-[#F94D4D]">{data?.overdueDebts || 0}</Heading>
         </div>
         <div className="p-[16px] rounded-[16px] border-[1px] border-[#ECECEC] w-full h-[127px] pr-[30px] flex flex-col justify-between">
             <Heading tag="h3">Mijozlar soni</Heading>
-            <Heading tag="h2" classList="!text-[18px] !text-[#30AF49]">23</Heading>
+            <Heading tag="h2" classList="!text-[18px] !text-[#30AF49]">{data?.debtors || 0}</Heading>
         </div>
       </div>
       <div className="mt-[40px]">
@@ -41,7 +52,7 @@ const Home = () => {
             </div>
             <div className="space-y-[4px]">
               <p className="text-[13px] font-medium">Hisobingizda</p>
-              <Heading tag="h1" classList="!text-[18px]">300 000 so‘m</Heading>
+              <Heading tag="h1" classList="!text-[18px]">{formatNumber(data?.wallet || 0)} so‘m</Heading>
             </div>
           </div>
           <Button type="primary" className="!px-[5px] !rounded-full"><PlusIcon /></Button>
