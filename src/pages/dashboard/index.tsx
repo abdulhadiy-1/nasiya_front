@@ -1,6 +1,8 @@
-import Home from "./Home";
-import Debtors from "./Debtors";
 import Payments from "./Payments";
 import Settings from "./Settings";
+import { lazy } from "react";
 
-export {Home, Debtors, Payments, Settings}
+const Home = lazy(() => import("./Home"));
+const Debtors = lazy(() => import("./Debtors"));
+
+export { Home, Debtors, Payments, Settings };

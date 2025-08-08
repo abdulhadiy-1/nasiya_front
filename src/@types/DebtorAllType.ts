@@ -9,6 +9,7 @@ export interface DebtorAllType {
   note: string;
   createdAt: string;
   updatedAt: string;
+  star: boolean
   Debt: Array<DebtType>;
   Seller: {
     id: string;

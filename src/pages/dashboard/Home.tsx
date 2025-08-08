@@ -4,17 +4,17 @@ import { EyeIcon, KolendarIcon, PlusIcon, WalletIcon } from "../../assets/icons"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import instance from "../../hooks/instance"
-import { useCookies } from "react-cookie"
 import type { SellerType } from "../../@types/SellerType"
 import { API } from "../../hooks/getEnv"
 import { formatNumber } from "../../hooks/formatNum"
+import { useNavigate } from "react-router-dom"
 
 const Home = () => {
   const [show, setShow] = useState<boolean>(true)
-  const [cookie] = useCookies(['accessToken'])
+  const navigate = useNavigate()
   const {data} = useQuery<SellerType>({
     queryKey: ['get-seller'],
-    queryFn: () => instance.get("/seller/me", {headers: {Authorization: `Bearer ${cookie.accessToken}`}}).then(res => res.data.data)
+    queryFn: () => instance.get("/seller/me").then(res => res.data.data)
   })
   
   return (
@@ -24,7 +24,8 @@ const Home = () => {
           <img className="rounded-full" src={`${API}${data?.img}`} alt="seller img" width={40} height={40}/>
           <Heading tag="h2">{data?.fullName}</Heading>
         </div>
-        <Button className="!bg-[#EDEDED] !py-[11px] !px-[5px]"><KolendarIcon /></Button>
+
+        <Button onClick={() => navigate('/debt/date')} className="!bg-[#EDEDED] !py-[11px] !px-[5px] hover:scale-[1.2]"><KolendarIcon /></Button>
       </div>
       <div className="bg-[#30AF49] text-white rounded-[20px] flex flex-col items-center justify-between py-[18px] relative mt-[38px]">
         <Heading classList="!text-[20px]" tag="h1">{show ? `${formatNumber(data?.totalDebt || 0)} so‘m` : "****"}</Heading>
@@ -39,7 +40,7 @@ const Home = () => {
             <Heading tag="h2" classList="!text-[18px] !text-[#F94D4D]">{data?.overdueDebts || 0}</Heading>
         </div>
         <div className="p-[16px] rounded-[16px] border-[1px] border-[#ECECEC] w-full h-[127px] pr-[30px] flex flex-col justify-between">
-            <Heading tag="h3">Mijozlar soni</Heading>
+            <Heading tag="h3">Mijozlar <br/> soni</Heading>
             <Heading tag="h2" classList="!text-[18px] !text-[#30AF49]">{data?.debtors || 0}</Heading>
         </div>
       </div>

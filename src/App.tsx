@@ -1,38 +1,37 @@
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import DashboardRoutes from "./routes/dashboard/DashboardRoutes";
-import { Login } from "./routes";
+import instance from "./hooks/instance";
+import { Login } from "./pages/auth";
 import LoadingPage from "./pages/LoadingPage";
-import axios from "axios";
-import { API } from "./hooks/getEnv";
+import Cookies from "js-cookie";
 
 function App() {
-  const [cookie] = useCookies(["accessToken"]);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (!cookie.accessToken) {
+      const accessToken = Cookies.get("accessToken");
+      if (!accessToken) {
         setIsAuthenticated(false);
+        setIsLoading(false);
         return;
       }
-      axios
-        .get(`${API}/seller/me`, {
-          headers: { Authorization: `Bearer ${cookie.accessToken}` },
-        })
-        .then(() => setIsAuthenticated(true))
-        .catch((error) => {
-          console.error(error);
-          setIsAuthenticated(false);
-        });
+
+      try {
+        await instance.get("/seller/me");
+        setIsAuthenticated(true);
+      } catch (err) {
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     checkAuth();
-  }, [cookie.accessToken]);
+  }, []);
 
-  if (isAuthenticated === null) {
-    return <LoadingPage />;
-  }
+  if (isLoading) return <LoadingPage />;
 
   return isAuthenticated ? <DashboardRoutes /> : <Login />;
 }

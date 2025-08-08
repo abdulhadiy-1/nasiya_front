@@ -1,4 +1,5 @@
 import { Debtors, Home, Payments, Settings } from "../pages/dashboard";
+import Calendar from "../pages/dashboard/Calendar";
 import NotFoundPage from "../pages/NotFoundPage";
 
 export const paths = {
@@ -7,6 +8,7 @@ export const paths = {
   debtors: "/clients",
   pay: "/payments",
   set: "/settings",
+  calendar: "/debt/date",
 };
 
 export const HomeRoutes = [
@@ -29,6 +31,11 @@ export const HomeRoutes = [
     id: 4,
     path: paths.set,
     element: <Settings />,
+  },
+  {
+    id: 6,
+    path: "/debt/date",
+    element: <Calendar />,
   },
   {
     id: 5,
