@@ -55,6 +55,31 @@
   border-top: none !important;
 }
 
+.ant-upload-select, .ant-upload-list-item-container{
+  width: 48% !important;
+  height: 112px !important;
+  border-radius: 16px !important;
+  border: 1px solid #ECECEC !important;
+}
+
+.ant-upload-list-item{
+  border: none !important;
+  padding: 0 !important;
+}
+
+.ant-upload-list-item::before{
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 16px !important;
+}
+
+
+.ant-upload-list-item-thumbnail > img{
+  width: 100% !important;
+  object-fit: fill !important;
+  border-radius: 16px !important;
+}
+
 
 @keyframes pageLoading {
   0% {

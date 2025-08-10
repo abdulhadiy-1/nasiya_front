@@ -9,5 +9,25 @@ export interface DebtType {
   sellerId: string;
   createdAt: string;
   updatedAt: string;
-  Payment: Array<{ amount: number }>;
+  Payment: Array<{
+    id: string;
+    debtId: string;
+    amount: number;
+    month: number;
+    date: number;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+  }>;
+  totalPayments: number;
+  nextPayment: {
+    id: string;
+    debtId: string;
+    amount: number;
+    month: number;
+    date: string;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
 }

@@ -1,5 +1,13 @@
-import { Debtors, Home, Payments, Settings } from "../pages/dashboard";
-import Calendar from "../pages/dashboard/Calendar";
+import {
+  Calendar,
+  DebtCreate,
+  DebtorCreate,
+  Debtors,
+  Home,
+  Payments,
+  Settings,
+  SingleDebtor,
+} from "../pages/dashboard";
 import NotFoundPage from "../pages/NotFoundPage";
 
 export const paths = {
@@ -9,6 +17,10 @@ export const paths = {
   pay: "/payments",
   set: "/settings",
   calendar: "/debt/date",
+  debtor_create: "/debtor/create",
+  debt_create: "/debt/create",
+  single_debtor: "/debtor/:id",
+
 };
 
 export const HomeRoutes = [
@@ -33,12 +45,27 @@ export const HomeRoutes = [
     element: <Settings />,
   },
   {
-    id: 6,
-    path: "/debt/date",
+    id: 5,
+    path: paths.calendar,
     element: <Calendar />,
   },
   {
-    id: 5,
+    id: 6,
+    path: paths.debtor_create,
+    element: <DebtorCreate />,
+  },
+  {
+    id: 7,
+    path: paths.single_debtor,
+    element: <SingleDebtor />,
+  },
+    {
+    id: 8,
+    path: paths.debt_create,
+    element: <DebtCreate />,
+  },
+  {
+    id: 9,
     path: "*",
     element: <NotFoundPage />,
   },

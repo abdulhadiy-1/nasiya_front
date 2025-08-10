@@ -302,3 +302,48 @@ export const ArrowIcon = ({ right }: { right?: boolean }) => (
     />
   </svg>
 );
+export const DebtorCreateIcon = () => (
+  <svg
+    width="25"
+    height="24"
+    viewBox="0 0 25 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M15.5 12C17.71 12 19.5 10.21 19.5 8C19.5 5.79 17.71 4 15.5 4C13.29 4 11.5 5.79 11.5 8C11.5 10.21 13.29 12 15.5 12ZM6.5 10V7H4.5V10H1.5V12H4.5V15H6.5V12H9.5V10H6.5ZM15.5 14C12.83 14 7.5 15.34 7.5 18V20H23.5V18C23.5 15.34 18.17 14 15.5 14Z"
+      fill="white"
+    />
+  </svg>
+);
+export const UploadIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M19 5V19H5V5H19ZM19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM14.14 11.86L11.14 15.73L9 13.14L6 17H18L14.14 11.86Z"
+      fill="black"
+      fillOpacity="0.7"
+    />
+  </svg>
+);
+export const MenuIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M12 12H12.01V12.01H12V12ZM12 5H12.01V5.01H12V5ZM12 19H12.01V19.01H12V19Z"
+      stroke="black"
+      strokeWidth="3.75"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

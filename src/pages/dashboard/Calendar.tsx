@@ -48,13 +48,18 @@ const Calendar = () => {
       <div className="bg-[#F6F6F6] w-full rounded-t-[16px] p-[16px]">
         <div className="containers">
           <Heading tag="h2" classList="mb-[8px]">
-            {(current as any).$D} {getMonth((current as any).$M)} kuni to‘lov
-            kutilmoqda
+            {(current as any).$D} {getMonth((current as any).$M)} kuni{" "}
+            {data?.unpaidForDay.length ? "to‘lov kutilmoqda" : "to‘lovlar yo'q"}
           </Heading>
           {data?.unpaidForDay?.map((item: UnPaidType) => (
-            <div key={item.id} className="py-[14px] px-[16px] rounded-[16px] bg-white w-full !mt-[12px] space-y-[4px]">
+            <div
+              key={item.id}
+              className="py-[14px] px-[16px] rounded-[16px] bg-white w-full !mt-[12px] space-y-[4px]"
+            >
               <Heading tag="h3">{item.Debt.Debtor.name}</Heading>
-              <p className="text-[14px] font-normal">UZS {formatNumber(item.amount || 0)}</p>
+              <p className="text-[14px] font-normal">
+                UZS {formatNumber(item.amount || 0)}
+              </p>
             </div>
           ))}
         </div>
