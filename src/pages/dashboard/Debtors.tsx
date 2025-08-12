@@ -1,4 +1,4 @@
-import { Button, Input, Popover, Select } from "antd";
+import { Button, Input, Popover, Select, Skeleton } from "antd";
 import {
   ActiveStarIcon,
   DebtorCreateIcon,
@@ -117,7 +117,14 @@ const Debtors = () => {
         </button>
       </div>
       {isLoading ? (
-        "Loading..."
+        <div className="space-y-[16px] mt-[28px]">
+        <Skeleton.Node active className="!w-full !h-[143px] !rounded-[16px]"/>
+        <Skeleton.Node active className="!w-full !h-[143px] !rounded-[16px]"/>
+        <Skeleton.Node active className="!w-full !h-[143px] !rounded-[16px]"/>
+        <Skeleton.Node active className="!w-full !h-[143px] !rounded-[16px]"/>
+        <Skeleton.Node active className="!w-full !h-[143px] !rounded-[16px]"/>
+        <Skeleton.Node active className="!w-full !h-[143px] !rounded-[16px]"/>
+        </div>
       ) : (
         <div className="overflow-y-auto space-y-[16px] mt-[28px]">
           {data?.map((item) => (

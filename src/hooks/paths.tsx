@@ -8,6 +8,7 @@ import {
   Settings,
   SingleDebtor,
 } from "../pages/dashboard";
+import SingleDebt from "../pages/dashboard/SingleDebt";
 import NotFoundPage from "../pages/NotFoundPage";
 
 export const paths = {
@@ -18,9 +19,10 @@ export const paths = {
   set: "/settings",
   calendar: "/debt/date",
   debtor_create: "/debtor/create",
-  debt_create: "/debt/create",
+  debtor_update: "/debtor/update/:id",
+  debt_create: "/debt/create/:id",
   single_debtor: "/debtor/:id",
-
+  single_debt: "/debt/:id",
 };
 
 export const HomeRoutes = [
@@ -59,7 +61,7 @@ export const HomeRoutes = [
     path: paths.single_debtor,
     element: <SingleDebtor />,
   },
-    {
+  {
     id: 8,
     path: paths.debt_create,
     element: <DebtCreate />,
@@ -68,5 +70,15 @@ export const HomeRoutes = [
     id: 9,
     path: "*",
     element: <NotFoundPage />,
+  },
+  {
+    id: 10,
+    path: paths.debtor_update,
+    element: <DebtorCreate />,
+  },
+  {
+    id: 11,
+    path: paths.single_debt,
+    element: <SingleDebt />,
   },
 ];

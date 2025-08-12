@@ -1,3 +1,5 @@
+import type { DebtorType } from "./DebtorType";
+
 export interface DebtType {
   id: string;
   productName: string;
@@ -27,6 +29,32 @@ export interface DebtType {
     month: number;
     date: string;
     isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
+export interface SingleDebtType extends DebtType {
+  Debtor: DebtorType;
+  ImgOfDebt: Array<{
+    id: string;
+    name: string;
+    debtId: string;
+    createdAt: string;
+    updatedAt: string;
+  }>;
+
+  Seller: {
+    id: string;
+    fullName: string;
+    phoneNumber: string;
+    email: string;
+    img: string;
+    wallet: number;
+    login: string;
+    password: string;
+    status: string;
+    refreshToken: string;
     createdAt: string;
     updatedAt: string;
   };

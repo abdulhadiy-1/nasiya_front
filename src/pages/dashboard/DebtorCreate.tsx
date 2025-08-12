@@ -1,55 +1,71 @@
 import { BackIcon } from "../../assets/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Heading from "../../components/Heading";
 import { Button, Input } from "antd";
 import UploadImage from "../../components/UploadImage";
-import { useState, type FormEvent } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState, type FormEvent } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import instance from "../../hooks/instance";
+import type { SingleDebtorType } from "../../@types/DebtorType";
 
 const DebtorCreate = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [images, setImages] = useState<Array<string>>([]);
   const [phones, setPhones] = useState<Array<string>>([""]);
   const [addNote, setAddNote] = useState<boolean>(false);
-  const queryClient = useQueryClient()
+  const [note, setNote] = useState<string>("");
+  const [createName, setCreateName] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
 
-  const { mutate: createMutate, isPending } = useMutation({
-    mutationFn: (data: { name: string; address: string; note?: string }) =>
-      instance.post("debtor", data),
-    onSuccess: (res) => {
-      console.log(res.data);
-      instance
-        .post("phone-of-debtor", {
-          phoneNumber: phones,
-          debtorId: res.data.data.id,
-        })
-        .then(() => {
-          if (images.length) {
-            instance.post("img-of-debtor", {
-              paths: images,
-              debtorId: res.data.data.id,
-            });
-          }
-          navigate(-1)
-          queryClient.invalidateQueries({queryKey: ["debtors"]})
-        });
+  const queryClient = useQueryClient();
+  const { data: debtor } = useQuery<SingleDebtorType>({
+    queryKey: ["debtor", id],
+    queryFn: () => instance.get(`/debtor/${id}`).then((res) => res.data.data),
+    enabled: !!id,
+  });
+
+  useEffect(() => {
+    if (id) {
+      
+      if (debtor) {
+        setCreateName(debtor.name);
+        setAddress(debtor.address);
+        setPhones(debtor.Phone.length ? debtor.Phone.map((item) => item.phoneNumber) : [""]);
+        setImages(debtor.ImgOfDebtor.map((item) => item.name) || []);
+        debtor.note && setNote(debtor.note || ""), setAddNote(true);
+      }
+    }
+  }, [debtor]);
+
+  const { mutate: saveMutate, isPending } = useMutation({
+    mutationFn: (data: { name: string; address: string; note?: string }) => {
+      if (id) {
+        return instance.patch(`/debtor/${id}`, data);
+      }
+      return instance.post("/debtor", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["debtors"] });
+      queryClient.invalidateQueries({ queryKey: ["single-debtor"] });
+      queryClient.invalidateQueries({ queryKey: ["debtor"] });
+      navigate(-1);
     },
   });
 
   function handleCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    let data: { name: string; address: string; note?: string } = {
-      name: (e.target as HTMLFormElement).createName.value,
-      address: (e.target as HTMLFormElement).address.value,
+    const data: { name: string; address: string; note?: string, phones?: Array<string>, images?: Array<string> } = {
+      name: createName,
+      address,
+      phones,
+      images
     };
-    if (
-      (e.target as HTMLFormElement).note &&
-      (e.target as HTMLFormElement).note.value
-    ) {
-      data.note = (e.target as HTMLFormElement).note.value;
+    if (note) {
+      data.note = note;
     }
-    createMutate(data);
+    
+    saveMutate(data);
   }
 
   return (
@@ -59,7 +75,7 @@ const DebtorCreate = () => {
           <BackIcon />
         </button>
         <Heading classList="!text-[18px]" tag="h2">
-          Mijoz yaratish
+          Mijoz {id ? "tahrirlash" : "yaratish"}
         </Heading>
       </div>
       <form onSubmit={handleCreate} className="mt-[24px]">
@@ -68,6 +84,8 @@ const DebtorCreate = () => {
             Ismi *
           </Heading>
           <Input
+            value={createName}
+            onChange={(e) => setCreateName(e.target.value)}
             required
             name="createName"
             className="!h-[44px] !bg-[#F6F6F6] !font-normal !text-[13px]"
@@ -78,9 +96,10 @@ const DebtorCreate = () => {
           <Heading tag="h3" classList="!text-[13px]">
             Telefon raqami *
           </Heading>
-          {phones.map((_, index) => (
+          {phones.map((item, index) => (
             <Input
               required
+              value={item}
               key={index}
               onChange={(e) => {
                 const newPhones = [...phones];
@@ -107,6 +126,8 @@ const DebtorCreate = () => {
               Yashash manzili
             </Heading>
             <Input
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               required
               name="address"
               className="!h-[44px] !rounded-[8px] !my-[8px] !bg-[#F6F6F6] !font-normal !text-[13px]"
@@ -120,6 +141,8 @@ const DebtorCreate = () => {
               Eslatma
             </Heading>
             <Input.TextArea
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
               name="note"
               className="!rounded-[8px] !my-[8px] !bg-[#F6F6F6] !font-normal !text-[13px]"
               placeholder="Eslatma kiriting"
@@ -138,6 +161,7 @@ const DebtorCreate = () => {
           <UploadImage images={images} setImages={setImages} />
         </div>
         <Button
+          disabled={!createName || !address}
           loading={isPending}
           type="primary"
           className="!w-full !h-[49px] !rounded-[10px] mt-[50px]"

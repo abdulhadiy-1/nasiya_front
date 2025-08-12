@@ -1,4 +1,9 @@
-import React, { useState, type Dispatch, type SetStateAction } from "react";
+import React, {
+  useEffect,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { Image, Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import { API } from "../hooks/getEnv";
@@ -41,9 +46,30 @@ const UploadImage: React.FC<{
     }
     if (file.status === "removed") {
       const pathToRemove = file.response?.path || file.url;
-      setImages((prev) => prev.filter((img) => img !== pathToRemove));
+      setImages((prev) =>
+        prev.filter(
+          (img) =>
+            img !==
+            (pathToRemove.split("http://52.87.184.81").length == 2
+              ? pathToRemove.split("http://52.87.184.81")[1]
+              : pathToRemove)
+        )
+      );
     }
   };
+
+  useEffect(() => {
+    if (images.length) {
+      setFileList(
+        images.map((img, index) => ({
+          uid: String(index),
+          name: `image-${index}.jpg`,
+          status: "done",
+          url: `${API}${img}`,
+        }))
+      );
+    }
+  }, [images]);
 
   const uploadButton = (
     <button type="button" className="flex flex-col items-center !w-full">
