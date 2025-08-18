@@ -16,6 +16,7 @@ import { useState } from "react";
 import type { SingleDebtType } from "../../@types/DebtType";
 import dayjs from "dayjs";
 import { API } from "../../hooks/getEnv";
+import toast from "react-hot-toast";
 
 const SingleDebt = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const SingleDebt = () => {
     queryKey: ["single-debt", id],
     queryFn: () => instance.get(`/debt/${id}`).then((res) => res.data.data),
   });
+  
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
@@ -36,8 +38,9 @@ const SingleDebt = () => {
   const { mutate: deleteMutate, isPending } = useMutation({
     mutationFn: () => instance.delete(`/debt/${id}`),
     onSuccess: () => {
-      navigate(-1),
-        queryClient.invalidateQueries({ queryKey: ["single-debtor"] });
+      queryClient.invalidateQueries({ queryKey: ["single-debtor"] });
+      toast.success("nasiya ochirildi")
+      navigate(-1);
     },
     onError: (err) => console.log(err),
   });
@@ -46,7 +49,7 @@ const SingleDebt = () => {
     <div className="w-[150px] h-[90px] px-[10px] py-[10px] flex flex-col justify-between items-start">
       <button
         className="cursor-pointer text-[14px] font-medium"
-        onClick={() => navigate(`/debtor/update/${id}`)}
+        onClick={() => navigate(`/debt/update/${data?.Debtor.id}/${id}`)}
       >
         Tahrirlash
       </button>
@@ -161,18 +164,19 @@ const SingleDebt = () => {
           </Heading>
           <div className="flex flex-wrap justify-between">
             {data?.ImgOfDebt.map((item, idx) => (
-              <div className="w-[48%] h-[112px] rounded-[16px] overflow-hidden">
+              <div key={idx} className="w-[48%] h-[112px] rounded-[16px] overflow-hidden">
                 <Image
                   key={idx}
                   src={`${API}${item.name}`}
                   className="!w-[100%] !h-[112px] object-cover"
-                  preview={{ mask: <EyeIcon />}}
+                  preview={{ mask: <EyeIcon /> }}
                 />
               </div>
             ))}
           </div>
         </div>
         <Button
+          onClick={() => navigate(`/debt-payment/${id}`)}
           type="primary"
           className="!w-full !h-[49px] !rounded-[10px] mt-[50px] text-[18px] font-medium"
           htmlType="button"

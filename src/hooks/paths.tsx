@@ -3,26 +3,42 @@ import {
   DebtCreate,
   DebtorCreate,
   Debtors,
+  DebtPayment,
   Home,
+  Message,
+  NotFoundPage,
   Payments,
+  Personal,
+  Sample,
+  SampleCreate,
   Settings,
+  SingleDebt,
   SingleDebtor,
 } from "../pages/dashboard";
-import SingleDebt from "../pages/dashboard/SingleDebt";
-import NotFoundPage from "../pages/NotFoundPage";
 
 export const paths = {
   login: "/",
   home: "/",
   debtors: "/clients",
   pay: "/payments",
+  message: "/payments/:id",
   set: "/settings",
   calendar: "/debt/date",
+  payment: "/debt-payment/:id",
+  personal: "/personal",
+
   debtor_create: "/debtor/create",
-  debtor_update: "/debtor/update/:id",
   debt_create: "/debt/create/:id",
+
+  debtor_update: "/debtor/update/:id",
+  debt_update: "/debt/update/:id/:debtId",
+
   single_debtor: "/debtor/:id",
   single_debt: "/debt/:id",
+
+  sample: "/sample",
+  sample_create: "/sample/create",
+  sample_update: "/sample/create/:id",
 };
 
 export const HomeRoutes = [
@@ -80,5 +96,40 @@ export const HomeRoutes = [
     id: 11,
     path: paths.single_debt,
     element: <SingleDebt />,
+  },
+  {
+    id: 12,
+    path: paths.debt_update,
+    element: <DebtCreate />,
+  },
+  {
+    id: 13,
+    path: paths.payment,
+    element: <DebtPayment />,
+  },
+  {
+    id: 14,
+    path: paths.message,
+    element: <Message />,
+  },
+  {
+    id: 15,
+    path: paths.sample,
+    element: <Sample />,
+  },
+  {
+    id: 16,
+    path: paths.sample_create,
+    element: <SampleCreate />,
+  },
+  {
+    id: 17,
+    path: paths.sample_update,
+    element: <SampleCreate />,
+  },
+  {
+    id: 18,
+    path: paths.personal,
+    element: <Personal />,
   },
 ];

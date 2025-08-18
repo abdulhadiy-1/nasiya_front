@@ -9,14 +9,16 @@ import {
   Select,
   type DatePickerProps,
 } from "antd";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import dayjs from "dayjs";
 import UploadImage from "../../components/UploadImage";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import instance from "../../hooks/instance";
+import type { SingleDebtType } from "../../@types/DebtType";
+import toast from "react-hot-toast";
 
 const DebtCreate = () => {
-  const { id } = useParams();
+  const { id, debtId } = useParams();
   const navigate = useNavigate();
   const [date, setDate] = useState<dayjs.Dayjs | null>(null);
   const [images, setImages] = useState<string[]>([]);
@@ -27,6 +29,27 @@ const DebtCreate = () => {
   const [isToday, setIsToday] = useState(false);
   const [addNote, setAddNote] = useState<boolean>(false);
   const queryClient = useQueryClient();
+
+  const { data: debt } = useQuery<SingleDebtType>({
+    queryKey: ["debt", debtId],
+    queryFn: () => instance.get(`/debt/${debtId}`).then((res) => res.data.data),
+    enabled: !!debtId,
+  });
+
+  useEffect(() => {
+    if (debt) {
+      const { productName, date, ImgOfDebt, term, note, amount } = debt;
+      setProductName(productName);
+      setDate(dayjs(date));
+      setImages(ImgOfDebt.map((item) => item.name));
+      setTerm(String(term));
+      if (note) {
+        setNote(note);
+        setAddNote(true);
+      }
+      setAmount(String(amount));
+    }
+  }, [debt]);
 
   const options = Array.from({ length: 24 }, (_, i) => ({
     value: String(i + 1),
@@ -63,12 +86,21 @@ const DebtCreate = () => {
       debtorId?: string;
       note?: string;
       images?: Array<string>;
-    }) => instance.post("/debt", data),
+    }) => {
+      if (debtId) {
+        return instance.patch(`/debt/${debtId}`, data);
+      } else {
+        return instance.post("/debt", data);
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["single-debtor"] });
+      toast.success(`nasiya ${debtId ? "tahrirlandi" : "yaratildi"}!`);
       navigate(-1);
     },
-    onError: (err) => console.log(err),
+    onError: (err) => {console.log(err),
+      toast.error("error on creating or updating debt")
+    }
   });
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -102,7 +134,7 @@ const DebtCreate = () => {
           <BackIcon />
         </button>
         <Heading classList="!text-[18px]" tag="h2">
-          Nasiya yaratish
+          Nasiya {debtId ? "tahrirlash" : "yaratish"}
         </Heading>
       </div>
       <form

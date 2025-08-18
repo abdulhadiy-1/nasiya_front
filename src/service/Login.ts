@@ -11,6 +11,7 @@ export const LoginService = (
     setCookies("accessToken", res.data.data.accessToken);
     setCookies("refreshToken", res.data.data.refreshToken);
     location.pathname ="/"
+    toast.success("logged in")
   }).catch(err => {
     if(err.status == 400){
       toast.error("wrong login or password")

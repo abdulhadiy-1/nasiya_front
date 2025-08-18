@@ -14,6 +14,7 @@ import type { DebtType } from "../../@types/DebtType";
 import { Button, Modal, Popover, Skeleton } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const SingleDebtor = () => {
   const { id } = useParams();
@@ -37,15 +38,17 @@ const SingleDebtor = () => {
   const { mutate: deleteMutate, isPending } = useMutation({
     mutationFn: () => instance.delete(`/debtor/${id}`),
     onSuccess: () => {
-      navigate(-1), queryClient.invalidateQueries({ queryKey: ["debtors"] });
+      toast.success("mijoz ochirildi");
+      queryClient.invalidateQueries({ queryKey: ["debtors"] });
+      navigate(-1);
     },
     onError: (err) => console.log(err),
   });
 
   function getPersent(item: DebtType) {
-    if (!item.Payment.length) return 0;
-    const paidCount = item.Payment.filter((p) => !p.isActive).length;
-    return (paidCount / item.Payment.length) * 100;
+    if (!item?.Payment?.length) return 0;
+    const paidCount = item?.Payment?.filter((p) => !p.isActive).length;
+    return (paidCount / item?.Payment?.length) * 100;
   }
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
@@ -82,7 +85,7 @@ const SingleDebtor = () => {
             {isLoading ? (
               <Skeleton.Node
                 active
-                className="!w-[200px] !h-[20px] ml-[30px] !rounded-[5px]"
+                className="!w-[170px] !h-[20px] ml-[30px] !rounded-[5px]"
               />
             ) : (
               <Heading classList="!text-[18px]" tag="h2">
@@ -115,8 +118,14 @@ const SingleDebtor = () => {
         <div className="py-[18.5px] px-[16px] bg-[#BBD2FC] rounded-[20px] space-y-[4px] mt-[20px]">
           <p className="text-[12px] font-medium">Umumiy nasiya:</p>
           <Heading tag="h1" classList="!text-[22px] !font-extrabold">
-            {formatNumber(singleDebtor?.totalAmount || 0)}{" "}
-            <span className="!font-semibold">so'm</span>
+            {isLoading ? (
+              <Skeleton.Node active className="!w-[100px] !h-[30px]" />
+            ) : (
+              <>
+                {formatNumber(singleDebtor?.totalAmount || 0)}{" "}
+                <span className="!font-semibold">so'm</span>
+              </>
+            )}
           </Heading>
         </div>
         <div className="mt-[24px]">
@@ -124,32 +133,62 @@ const SingleDebtor = () => {
             Faol nasiyalar
           </Heading>
           <div className="space-y-[16px]">
-            {singleDebtor?.Debt?.map((item) => (
-              <div onClick={() => navigate(`/debt/${item.id}`)} className="bg-[#F6F6F6] p-[16px] rounded-[16px] cursor-pointer">
-                <div className="flex items-center justify-between mb-[20px]">
-                  <p className="font-medium text-[14px]">Nov 1, 2024 14:51</p>
-                  <p className="text-[#3478F7] font-semibold text-[14px]">
-                    {formatNumber(item.totalPayments)}{" "}
-                    <span className="!font-medium">so'm</span>
+            {isLoading ? (
+              <>
+                <Skeleton.Node
+                  active
+                  className="!w-full !h-[143px] !rounded-[16px]"
+                />
+                <Skeleton.Node
+                  active
+                  className="!w-full !h-[143px] !rounded-[16px]"
+                />
+                <Skeleton.Node
+                  active
+                  className="!w-full !h-[143px] !rounded-[16px]"
+                />
+              </>
+            ) : singleDebtor?.Debt.length ? (
+              singleDebtor?.Debt?.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => navigate(`/debt/${item?.id}`)}
+                  className="bg-[#F6F6F6] p-[16px] rounded-[16px] cursor-pointer"
+                >
+                  <div className="flex items-center justify-between mb-[20px]">
+                    <p className="font-medium text-[14px]">Nov 1, 2024 14:51</p>
+                    <p className="text-[#3478F7] font-semibold text-[14px]">
+                      {formatNumber(item?.totalPayments)}{" "}
+                      <span className="!font-medium">so'm</span>
+                    </p>
+                  </div>
+                  <p className="font-normal text-[12px]">
+                    Keyingi to‘lov: {item?.nextPayment?.date.split("T")[0]}
                   </p>
+                  <Heading tag="h2" classList="!font-extrabold text-[#735CD8]">
+                    {formatNumber(item?.nextPayment?.amount || 0)}{" "}
+                    <span className="!text-[12px] !font-normal !text-[#726C6C]">
+                      so'm
+                    </span>
+                  </Heading>
+                  <div className="my-[16px] h-[8px] bg-[#CCCCCC] rounded-[50px] overflow-hidden">
+                    <div
+                      className="h-full bg-[#30AF49]"
+                      style={{ width: `${getPersent(item)}%` }}
+                    ></div>
+                  </div>
                 </div>
-                <p className="font-normal text-[12px]">
-                  Keyingi to‘lov: {item.nextPayment.date.split("T")[0]}
-                </p>
-                <Heading tag="h2" classList="!font-extrabold text-[#735CD8]">
-                  {formatNumber(item.nextPayment.amount || 0)}{" "}
-                  <span className="!text-[12px] !font-normal !text-[#726C6C]">
-                    so'm
-                  </span>
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center gap-[8px] max-w-[248px] mx-auto mt-[30%] text-center">
+                <Heading tag="h2" classList="!font-bold">
+                  Mijozda hali nasiya mavjud emas
                 </Heading>
-                <div className="my-[16px] h-[8px] bg-[#CCCCCC] rounded-[50px] overflow-hidden">
-                  <div
-                    className="h-full bg-[#30AF49]"
-                    style={{ width: `${getPersent(item)}%` }}
-                  ></div>
-                </div>
+                <p className="font-normal text-[14px]">
+                  Nasiya yaratish uchun pastdagi “+” tugmasini bosing
+                </p>
               </div>
-            ))}
+            )}
           </div>
         </div>
         <div className="fixed bottom-[80px] left-[calc(50%+45px)] z-50">
@@ -165,7 +204,7 @@ const SingleDebtor = () => {
       <Modal
         className="!mt-[170px]"
         width={315}
-        okButtonProps={{loading:isPending}}
+        okButtonProps={{ loading: isPending }}
         onOk={() => deleteMutate()}
         title="Aniq o'chirmiqchimisiz?"
         okText="Ochirish"

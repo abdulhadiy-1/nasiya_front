@@ -27,7 +27,7 @@ const Login = () => {
 
   return (
     <>
-    <Toaster position="top-center"/>
+    <Toaster position="top-right"/>
     <div className="containers relative !pt-[90px] h-[100vh]">
       <img className="logo-icon mb-[32px]" src={logo} alt="Logo" width={40} height={40} />
       <Heading tag="h1" classList="!mb-[12px]">Dasturga kirish</Heading>

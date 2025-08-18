@@ -13,6 +13,8 @@ import type { SellerType } from "../../@types/SellerType";
 import { API } from "../../hooks/getEnv";
 import { formatNumber } from "../../hooks/formatNum";
 import { useNavigate } from "react-router-dom";
+import { UserImg } from "../../assets/images";
+import SkeletonNode from "antd/es/skeleton/Node";
 
 const Home = () => {
   const [show, setShow] = useState<boolean>(true);
@@ -27,17 +29,20 @@ const Home = () => {
       <div className="flex items-center justify-between">
         {isLoading ? (
           <>
-            <Skeleton.Avatar size={"large"} className="!mr-[20px]" />
-            <Skeleton paragraph={{ rows: 0, className: "!mt-[0px] " }} />
+            <Skeleton.Avatar size={"large"} className="!mr-[20px]" active />
+            <Skeleton paragraph={{ rows: 0, className: "!mt-[0px] " }} active />
           </>
         ) : (
           <div className="flex items-center gap-[15px]">
             <img
-              className="rounded-full"
+              className="rounded-full w-[40px] h-[40px] bg-[#E7E7E7]"
               src={`${API}${data?.img}`}
               alt="seller img"
               width={40}
               height={40}
+              onError={(e) => {
+                e.currentTarget.src = UserImg;
+              }}
             />
             <Heading tag="h2">{data?.fullName}</Heading>
           </div>
@@ -52,7 +57,13 @@ const Home = () => {
       </div>
       <div className="bg-[#30AF49] text-white rounded-[20px] flex flex-col items-center justify-between py-[18px] relative mt-[38px]">
         <Heading classList="!text-[20px]" tag="h1">
-          {show ? `${formatNumber(data?.totalDebt || 0)} so‘m` : "****"}
+          {isLoading ? (
+            <SkeletonNode className="!w-[150px] !h-[30px]" active />
+          ) : show ? (
+            `${formatNumber(data?.totalDebt || 0)} so‘m`
+          ) : (
+            "****"
+          )}
         </Heading>
         <Heading tag="h3" classList="!text-[#F6F6F6B2]">
           Umumiy nasiya:
@@ -68,7 +79,11 @@ const Home = () => {
         <div className="p-[16px] rounded-[16px] border-[1px] border-[#ECECEC] w-full h-[127px] pr-[30px] flex flex-col justify-between">
           <Heading tag="h3">Kechiktirilgan to‘lovlar</Heading>
           <Heading tag="h2" classList="!text-[18px] !text-[#F94D4D]">
-            {data?.overdueDebts || 0}
+            {isLoading ? (
+              <SkeletonNode className="!w-[130px] !h-[27px]" active />
+            ) : (
+              data?.overdueDebts || 0
+            )}
           </Heading>
         </div>
         <div className="p-[16px] rounded-[16px] border-[1px] border-[#ECECEC] w-full h-[127px] pr-[30px] flex flex-col justify-between">
@@ -76,7 +91,11 @@ const Home = () => {
             Mijozlar <br /> soni
           </Heading>
           <Heading tag="h2" classList="!text-[18px] !text-[#30AF49]">
-            {data?.debtors || 0}
+            {isLoading ? (
+              <SkeletonNode className="!w-[130px] !h-[27px]" active />
+            ) : (
+              data?.debtors || 0
+            )}
           </Heading>
         </div>
       </div>
@@ -92,7 +111,12 @@ const Home = () => {
             <div className="space-y-[4px]">
               <p className="text-[13px] font-medium">Hisobingizda</p>
               <Heading tag="h1" classList="!text-[18px]">
-                {formatNumber(data?.wallet || 0)} so‘m
+                {
+                  isLoading?
+              <SkeletonNode className="!w-[180px] !h-[27px]" active />
+              :
+              `${formatNumber(data?.wallet || 0)} so‘m`
+            }
               </Heading>
             </div>
           </div>

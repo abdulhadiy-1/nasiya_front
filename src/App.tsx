@@ -3,15 +3,16 @@ import DashboardRoutes from "./routes/dashboard/DashboardRoutes";
 import instance from "./hooks/instance";
 import { Login } from "./pages/auth";
 import LoadingPage from "./pages/LoadingPage";
-import Cookies from "js-cookie";
+import { useCookies } from "react-cookie";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [cookie] = useCookies(["accessToken"])
 
   useEffect(() => {
     const checkAuth = async () => {
-      const accessToken = Cookies.get("accessToken");
+      const accessToken = cookie.accessToken
       if (!accessToken) {
         setIsAuthenticated(false);
         setIsLoading(false);
@@ -29,7 +30,7 @@ function App() {
     };
 
     checkAuth();
-  }, []);
+  }, [cookie.accessToken]);
 
   if (isLoading) return <LoadingPage />;
 

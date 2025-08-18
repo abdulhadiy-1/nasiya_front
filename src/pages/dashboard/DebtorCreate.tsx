@@ -7,6 +7,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import instance from "../../hooks/instance";
 import type { SingleDebtorType } from "../../@types/DebtorType";
+import toast from "react-hot-toast";
 
 const DebtorCreate = () => {
   const { id } = useParams();
@@ -27,11 +28,14 @@ const DebtorCreate = () => {
 
   useEffect(() => {
     if (id) {
-      
       if (debtor) {
         setCreateName(debtor.name);
         setAddress(debtor.address);
-        setPhones(debtor.Phone.length ? debtor.Phone.map((item) => item.phoneNumber) : [""]);
+        setPhones(
+          debtor.Phone.length
+            ? debtor.Phone.map((item) => item.phoneNumber)
+            : [""]
+        );
         setImages(debtor.ImgOfDebtor.map((item) => item.name) || []);
         debtor.note && setNote(debtor.note || ""), setAddNote(true);
       }
@@ -49,22 +53,29 @@ const DebtorCreate = () => {
       queryClient.invalidateQueries({ queryKey: ["debtors"] });
       queryClient.invalidateQueries({ queryKey: ["single-debtor"] });
       queryClient.invalidateQueries({ queryKey: ["debtor"] });
+      toast.success(`mijoz ${id ? "tahrirlandi" : "yaratildi"}!`);
       navigate(-1);
     },
   });
 
   function handleCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data: { name: string; address: string; note?: string, phones?: Array<string>, images?: Array<string> } = {
+    const data: {
+      name: string;
+      address: string;
+      note?: string;
+      phones?: Array<string>;
+      images?: Array<string>;
+    } = {
       name: createName,
       address,
       phones,
-      images
+      images,
     };
     if (note) {
       data.note = note;
     }
-    
+
     saveMutate(data);
   }
 

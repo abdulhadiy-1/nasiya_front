@@ -50,8 +50,8 @@ const UploadImage: React.FC<{
         prev.filter(
           (img) =>
             img !==
-            (pathToRemove.split("http://52.87.184.81").length == 2
-              ? pathToRemove.split("http://52.87.184.81")[1]
+            (pathToRemove.split(API).length == 2
+              ? pathToRemove.split(API)[1]
               : pathToRemove)
         )
       );

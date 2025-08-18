@@ -1,4 +1,5 @@
 import type { DebtorType } from "./DebtorType";
+import type { PaymentType } from "./PaymentType";
 
 export interface DebtType {
   id: string;
@@ -11,27 +12,9 @@ export interface DebtType {
   sellerId: string;
   createdAt: string;
   updatedAt: string;
-  Payment: Array<{
-    id: string;
-    debtId: string;
-    amount: number;
-    month: number;
-    date: number;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
-  }>;
+  Payment: Array<PaymentType>;
   totalPayments: number;
-  nextPayment: {
-    id: string;
-    debtId: string;
-    amount: number;
-    month: number;
-    date: string;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
-  };
+  nextPayment: PaymentType;
 }
 
 export interface SingleDebtType extends DebtType {

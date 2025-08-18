@@ -14,6 +14,18 @@
   transition: all 1s;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 .active {
   color: #0e5ff6;
 }
@@ -43,42 +55,84 @@
   align-items: end !important;
   justify-content: center !important;
   border-radius: 8px !important;
-  border: 1px solid #EDEDED ;
+  border: 1px solid #ededed;
 }
 
-.ant-picker-calendar .ant-picker-cell-selected > .ant-picker-cell-inner{
-  background-color: #DDE9FE !important;
+.ant-picker-calendar .ant-picker-cell-selected > .ant-picker-cell-inner {
+  background-color: #dde9fe !important;
   color: black !important;
-  border: 1px solid #78A5FA ;
+  border: 1px solid #78a5fa;
 }
 .ant-picker-panel {
   border-top: none !important;
 }
 
-.ant-upload-select, .ant-upload-list-item-container{
+.ant-upload-select,
+.ant-upload-list-item-container {
   width: 48% !important;
   height: 112px !important;
   border-radius: 16px !important;
-  border: 1px solid #ECECEC !important;
+  border: 1px solid #ececec !important;
 }
 
-.ant-upload-list-item{
+.ant-upload-list-item {
   border: none !important;
   padding: 0 !important;
 }
 
-.ant-upload-list-item::before{
+.ant-upload-list-item::before {
   width: 100% !important;
   height: 100% !important;
   border-radius: 16px !important;
 }
 
-
-.ant-upload-list-item-thumbnail > img{
+.ant-upload-list-item-thumbnail > img {
   width: 100% !important;
   object-fit: fill !important;
   border-radius: 16px !important;
 }
+
+/* Размер и базовые стили */
+.ant-switch {
+  min-width: 22px !important;
+  width: 22px !important;
+  height: 12px !important;
+  padding: 0 !important;
+  background-color: gray !important; /* фон по умолчанию */
+}
+
+/* Только для выключенного состояния */
+.ant-switch:not(.ant-switch-checked) {
+  background-color: gray !important; /* серый фон, когда выключен */
+}
+
+/* Убираем текст */
+.ant-switch-inner {
+  display: none !important;
+}
+
+/* Кнопка */
+.ant-switch .ant-switch-handle {
+  width: 10px !important;
+  height: 10px !important;
+  top: 1px !important;
+}
+
+/* Кнопка внутри */
+.ant-switch .ant-switch-handle::before {
+  background-color: white !important;
+}
+
+/* Включенное состояние */
+.ant-switch.ant-switch-checked {
+  background-color: #735CD8 !important;
+}
+
+/* Позиция кнопки при включении */
+.ant-switch.ant-switch-checked .ant-switch-handle {
+  left: calc(100% - 10px - 1px) !important;
+}
+
 
 
 @keyframes pageLoading {
