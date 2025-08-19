@@ -129,40 +129,52 @@ const Debtors = () => {
         </div>
       ) : (
         <div className="overflow-y-auto space-y-[16px] mt-[28px]">
-          {data?.map((item) => (
-            <div
-              onClick={() => navigate(`/debtor/${item.id}`)}
-              key={item.id}
-              className="rounded-[16px] border-[1px] border-[#ECECEC] bg-[#F6F6F6] p-[16px] w-full h-[143px] flex flex-col justify-between cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <div className="space-y-[4px]">
-                  <Heading tag="h2">{item.name}</Heading>
-                  <p className="font-medium text-[14px] text-[#1A1A1A]">
-                    {item?.Phone?.[0]?.phoneNumber || "Unknown"}
-                  </p>
+          {
+            data?.length ?
+            data?.map((item) => (
+              <div
+                onClick={() => navigate(`/debtor/${item.id}`)}
+                key={item.id}
+                className="rounded-[16px] border-[1px] border-[#ECECEC] bg-[#F6F6F6] p-[16px] w-full h-[143px] flex flex-col justify-between cursor-pointer"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="space-y-[4px]">
+                    <Heading tag="h2">{item.name}</Heading>
+                    <p className="font-medium text-[14px] text-[#1A1A1A]">
+                      {item?.Phone?.[0]?.phoneNumber || "Unknown"}
+                    </p>
+                  </div>
+                  <button
+                    className="cursor-pointer hover:scale-[1.2] duration-300"
+                    onClick={(e) => {
+                      e.stopPropagation(), starMutate(item.id);
+                    }}
+                  >
+                    {item.star ? <ActiveStarIcon /> : <StarIcon />}
+                  </button>
                 </div>
-                <button
-                  className="cursor-pointer hover:scale-[1.2] duration-300"
-                  onClick={(e) => {
-                    e.stopPropagation(), starMutate(item.id);
-                  }}
-                >
-                  {item.star ? <ActiveStarIcon /> : <StarIcon />}
-                </button>
+                <div className="space-y-[4px]">
+                  <p className="font-medium text-[12px] text-[#1A1A1A]">
+                    Jami nasiya
+                  </p>
+                  <Heading tag="h2" classList="text-[#F94D4D]">
+                    {item?.totalDebt == 0
+                      ? `${formatNumber(item?.totalDebt || 0)} so‘m`
+                      : `-${formatNumber(item?.totalDebt || 0)} so‘m`}
+                  </Heading>
+                </div>
               </div>
-              <div className="space-y-[4px]">
-                <p className="font-medium text-[12px] text-[#1A1A1A]">
-                  Jami nasiya
-                </p>
-                <Heading tag="h2" classList="text-[#F94D4D]">
-                  {item?.totalDebt == 0
-                    ? `${formatNumber(item?.totalDebt || 0)} so‘m`
-                    : `-${formatNumber(item?.totalDebt || 0)} so‘m`}
-                </Heading>
-              </div>
+            ))
+            :
+            <div className="flex flex-col items-center justify-center gap-[8px] max-w-[248px] mx-auto mt-[50%] text-center">
+              <Heading tag="h2" classList="!font-bold">
+                Hali Mijozlar mavjud emas
+              </Heading>
+              <p className="font-normal text-[14px]">
+                Mijoz yaratish uchun pastdagi “+” tugmasini bosing
+              </p>
             </div>
-          ))}
+          }
         </div>
       )}
       <div className="fixed bottom-[80px] left-[calc(50%+45px)] z-50">
