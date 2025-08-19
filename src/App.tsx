@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import DashboardRoutes from "./routes/dashboard/DashboardRoutes";
 import instance from "./hooks/instance";
-import { Login } from "./pages/auth";
 import LoadingPage from "./pages/LoadingPage";
 import { useCookies } from "react-cookie";
+import AuthRoutes from "./routes/auth/AuthRoutes";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,7 +34,7 @@ function App() {
 
   if (isLoading) return <LoadingPage />;
 
-  return isAuthenticated ? <DashboardRoutes /> : <Login />;
+  return isAuthenticated ? <DashboardRoutes /> : <AuthRoutes />;
 }
 
 export default App;

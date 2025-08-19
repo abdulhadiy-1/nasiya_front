@@ -74,7 +74,7 @@ const SingleDebt = () => {
           {isLoading ? (
             <Skeleton.Node
               active
-              className="!w-[200px] !h-[20px] ml-[30px] !rounded-[5px]"
+              className="!w-[150px] !h-[20px] !rounded-[5px]"
             />
           ) : (
             <Heading classList="!text-[18px]" tag="h2">

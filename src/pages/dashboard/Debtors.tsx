@@ -34,6 +34,7 @@ const Debtors = () => {
     setParamData({ sortBy, sortOrder });
     setOpen(!open);
   }
+  console.log(paramData);
 
   const debounced = useDebounce(search, 1000);
 
@@ -46,6 +47,7 @@ const Debtors = () => {
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
   };
+  
   const { data, isLoading } = useQuery<Array<DebtorAllType>>({
     queryKey: ["debtors", debounced, paramData],
     queryFn: () =>

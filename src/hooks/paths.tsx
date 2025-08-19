@@ -18,6 +18,9 @@ import {
 
 export const paths = {
   login: "/",
+  sendOtp: "/send-otp",
+  verifyOtp: "/verify-otp/:email",
+  updatePass: "/update/password/:id",
   home: "/",
   debtors: "/clients",
   pay: "/payments",
@@ -132,4 +135,5 @@ export const HomeRoutes = [
     path: paths.personal,
     element: <Personal />,
   },
+  
 ];

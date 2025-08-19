@@ -57,7 +57,7 @@ const Notification = () => {
                     {item.name}
                   </Heading>
                   <p className="font-semibold text-[13px] text-[#000000B2]">
-                    {item.Phone?.[0]?.phoneNumber}
+                    {item.Phone?.[0] ? item.Phone?.[0]?.phoneNumber : "Unknown"}
                   </p>
                 </div>
                 <p className="font-semibold text-[12px] text-[#00000092]">
@@ -113,7 +113,7 @@ const Notification = () => {
                     {item.name}
                   </Heading>
                   <p className="font-semibold text-[13px] text-[#000000B2]">
-                    {item.Phone?.[0]?.phoneNumber}
+                    {item.Phone?.[0] ? item.Phone?.[0]?.phoneNumber : "Unknown"}
                   </p>
                 </div>
                 <p className="font-semibold text-[12px] text-[#00000092]">

@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import instance from "../../hooks/instance";
 import type { SingleNotificationType } from "../../@types/NotificationType";
-import { BackIcon, MenuIcon, SetIcon } from "../../assets/icons";
+import { BackIcon, MenuIcon, PlaneIcon, SetIcon } from "../../assets/icons";
 import Heading from "../../components/Heading";
 import { Input, Modal, Popover } from "antd";
 import { getMonth } from "../../hooks/getMonth";
@@ -58,8 +58,8 @@ const Message = () => {
       queryClient.invalidateQueries({ queryKey: ["single-notification"] });
       queryClient.invalidateQueries({ queryKey: ["all-notification"] });
       queryClient.invalidateQueries({ queryKey: ["notification"] });
-      setIsOpenModal(false)
-      navigate(-1)
+      setIsOpenModal(false);
+      navigate(-1);
       toast.success("notification deleted");
     },
     onError: (err: AxiosError) => {
@@ -167,13 +167,22 @@ const Message = () => {
           <button className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
             <SetIcon />
           </button>
-          <form className="w-full" onSubmit={handleSubmit}>
-            <Input
+          <form className="w-full relative" onSubmit={handleSubmit}>
+            <Input.TextArea
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              className="!rounded-[50px] !font-normal !bg-[#F5F5F5] !text-[14px] !h-[42px]"
+              className="!rounded-[20px] !font-normal !pr-[45px] !bg-[#F5F5F5] !text-[14px] !min-h-[35px]"
               placeholder="Xabar yuborish..."
+              autoSize={{ minRows: 1, maxRows: 5 }} 
             />
+            <button
+              className={`absolute bottom-[6px] right-[17px] cursor-pointer ${
+                !newMessage && "hidden"
+              }`}
+              type="submit"
+            >
+              <PlaneIcon />
+            </button>
           </form>
         </div>
       </div>

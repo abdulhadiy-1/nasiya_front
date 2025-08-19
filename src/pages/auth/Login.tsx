@@ -10,6 +10,7 @@ import Text from "../../components/Text"
 import {LoginService} from "../../service/Login"
 import { useCookies } from "react-cookie"
 import { Toaster } from "react-hot-toast"
+import { paths } from "../../hooks/paths"
 
 
 
@@ -41,7 +42,7 @@ const Login = () => {
           <Input.Password className={`${errors.password && touched.password ? "!border-red-500" : ""} mt-[24px]`} value={values.password} onChange={handleChange} onBlur={handleBlur} prefix={<span className={`${errors.password && touched.password ? "!text-red-500" : ""}`}><KeyIcon /></span>} allowClear name="password" type="password" size="large" placeholder="Parol" />
           {errors.password && touched.password && <span className="text-[13px] text-red-500">{errors.password}</span>}
         </label>
-        <Link className="text-[13px] mb-[46px] text-[#3478F7] border-b-[1px] border-[#3478F7] w-[130px] ml-auto block text-end mt-[10px]" to={'#'}>Parolni unutdingizmi?</Link>
+        <Link className="text-[13px] mb-[46px] text-[#3478F7] border-b-[1px] border-[#3478F7] w-[130px] ml-auto block text-end mt-[10px]" to={paths.sendOtp}>Parolni unutdingizmi?</Link>
         <Button loading={isPenning} htmlType="submit" className={`w-full !h-[45px] !text-[18px] !font-medium" size="large ${isPenning ? "cursor-not-allowed" : ""}`} type="primary">Kirish</Button>
       </form>
       <Text classList="bottom-text absolute bottom-0 !font-normal !pb-[10px]">Hisobingiz yo'q bo'lsa, tizimga kirish huquqini olish uchun <span className="text-[#3478F7]">do'kon administratori</span>  bilan bog'laning.</Text>
