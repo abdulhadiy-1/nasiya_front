@@ -124,7 +124,13 @@ const DebtorCreate = () => {
           <div className="flex justify-end">
             <button
               type="button"
-              onClick={() => setPhones([...phones, ""])}
+              onClick={() => {
+                if(phones[phones.length-1]){
+                  setPhones([...phones, ""])
+                }else{
+                  toast.error("oldingi katorni toldiring")
+                }
+              }}
               className="text-[#3478F7] text-[14px] font-medium cursor-pointer"
             >
               + Ko‘proq qo‘shish
