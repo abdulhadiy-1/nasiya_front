@@ -15,7 +15,7 @@ import type { SellerType } from "../../@types/SellerType";
 
 const UpdatePassword = () => {
   const { id } = useParams();
-  const { data } = useQuery<SellerType>({
+  useQuery<SellerType>({
     queryKey: ["get-seller", id],
     queryFn: () =>
       instance.get(`/seller/${id}`).then(res => res.data.data).catch((err) => {
